@@ -1,0 +1,9 @@
+/* ------------------ 21.07.13 css test (최졔) --------------------*/
+
+textarea{
+    width:100%;
+}
+
+input[type=submit]{
+    margin-top : 20px;
+}
