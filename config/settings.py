@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR의 기본경로는 해당 프로젝트의 ROOT 경로
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
@@ -20,17 +21,24 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+# DJANGO의 각종 쿠키 파일관리등 보안을 담당하는 KEY
+# 시크릿키 노출시 해당 프로젝트의 보안기능 상실 위험성 증가
 SECRET_KEY = 'c=x08d5w#!d^hu-3tu2m^&5r*jql$ec1tp1%74g*(&&3bv7=%n'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+# jango 프젝에 대한 log를 남길지 말지를 설정하는 부분
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
 
-# Application definition
+# Application definition : 생성한 app들을 등록해주는 설정
+# app1 VS app1.apps.App1Config
+# app1만 적혀있다면 app1의 __init.py에서
+# default app config가 정의되어있는가를 확인
 
 INSTALLED_APPS = [
+    'common.apps.CommonConfig',
     'app1.apps.App1Config',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -78,6 +86,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+
     }
 }
 
@@ -103,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
-
+# 언어 및 지역시간 설정
 LANGUAGE_CODE = 'ko-kr'
 
 TIME_ZONE = 'Asia/Seoul'
