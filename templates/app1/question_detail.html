@@ -1,8 +1,17 @@
 
 {% extends 'base.html' %}
 {% block content %}
-
+{% block script %}
 <div class="container my-3">        <!--my-3:마진 y(top,bottom을 3씩줌) -->
+    <!-- 21.07.22 에러 메세지 표시 -->
+    {% if messages %}
+    <div class="alert alert-danger my-3" role="alert">
+        {% for msg in messages %}
+        <strong>{{msg.tags}}</strong>
+        <ul><li>{{msg.message}}</li></ul>
+        {% endfor %}
+    </div>
+    {% endif %}
     <h2 class="border-bottom py-2">{{question.subject}}</h2> <!-- 질문 상세보기 페이지 -->
     <div class="card my-3">
         <div class="card-body">
@@ -11,9 +20,22 @@
             </div>
             <div class="d-flex justify-content-end">
                 <div class="badge badge-light p-2">
+                    <div class="m-2">{{question.author.username}}</div>
                     {{question.create_date}}
                 </div>
             </div>
+            <!-- 21.07.21 수정, 삭제 버튼 등록
+            data-uri : data 접두사라는것이 붙은 데이터 문자열
+                      -> 이미지, 영상, 사운드 파일 등의 데이터 전송에도 사용가능
+            -->
+            {% if request.user == question.author %}
+            <div class="my-3">
+                <a href="{% url 'app1:question_modify' question.id %}" class="btn btn-sm btn-outline-secondary"> 수정 </a>
+
+                <a href="#" data-uri="{% url 'app1:question_delete' question.id %}" class="delete btn btn-sm btn-outline-secondary"> 삭제 </a>
+
+            </div> <!-- 수정, 삭제버튼의 끝 -->
+            {% endif %}
         </div>
     </div>
     <h5 class="border-bottom my-3 py-2">{{question.answer_set.count}}개의 답변이 있습니다.</h5>
@@ -25,9 +47,16 @@
             </div>
             <div class="d-flex justify-content-end">
                 <div class="badge badge-light p-2">
+                    <div class="m-2">{{answer.author.username}}</div>
                     {{ answer.create_date }}
                 </div>
             </div>
+            {% if request.user == answer.author %}
+            <div class="my-3">
+                <a href="{% url 'app1:answer_modify' answer.id %}" class="btn btn-sm btn-outline-secondary">수정</a>
+                <a href="#" data-uri="{% url 'app1:answer_delete' answer.id %}" class="delete btn btn-sm btn-outline-secondary"> 삭제 </a>
+            </div>
+            {% endif %}
 
         </div>
 
@@ -36,8 +65,34 @@
 
 <form action="{% url 'app1:answer_create' question.id %}" method="post">
     {% csrf_token %}
-    <textarea name="answer_content" id="answer_content" rows="15"></textarea>
-    <input type="submit" value="답변등록하기">
+        {% if form.errors %}  <!-- ★★★ 올바르지 않은 값이 들어갔을때 하위 div를 실행함 ★★★ -->
+      <div class="alert alert-danger" role="alert">
+        {% for field in form %}
+          {% if field.errors %}
+          <strong>{{ field.label }}</strong>
+          {{ field.errors }}
+          {% endif %}
+        {% endfor %}
+
+      </div>
+    {% endif %}
+    <div class="form-group">
+    <textarea {% if not user.is_authenticated %}disabled{% endif %} name="answer_content" id="answer_content" rows="10"></textarea>
+        </div>
+    <input type="submit" value="답변등록하기" class="btn btn-primary">
 </form>
 </div>
+{% endblock %}
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $(".delete").on('click',function(){
+        if(confirm("정말 삭제하시겠습니까?")){
+            location.href = $(this).data('uri');
+        }
+    });
+
+});
+
+</script>
 {% endblock %}

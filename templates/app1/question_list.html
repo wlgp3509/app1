@@ -9,12 +9,12 @@
     일련번호 = 전체 게시물 개수 - 시작인덱스 - 현재인덱스 + 1
     ex)  105 - 21 - 0+1 (3번째 페이지)
      -->
-
     <table class="table">
         <thead>
-            <tr class="thead-dark">
+            <tr class="text-center thead-dark">
                 <th>번호</th>
-                <th>제목</th>
+                <th style="width:50%">제목</th>
+                <th>작성자</th>
                 <th>작성일</th>
 
             </tr>
@@ -22,14 +22,15 @@
         <tbody>
         {% if question_list %}
         {% for question in question_list %}
-        <tr>
+        <tr class="text-center">
             <td>{{ question_list.paginator.count|sub:question_list.start_index|sub:forloop.counter0|add:1 }}</td>
-            <td>
+            <td class="text-left">
                 <a href="{% url 'app1:detail' question.id %}">{{question.subject}}</a>
                 {% if question.answer_set.count > 0 %}
                 <span class="text-danger m-2">{{ question.answer_set.count }}</span>
                 {% endif %}
             </td>
+            <td>{{ question.author.username }}</td>
             <td>{{ question.create_date }}</td>
 
         </tr>
