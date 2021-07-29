@@ -81,11 +81,29 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+
+    }
+}
+'''
+
+# DBMS mysql로 변경
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'crawl_data',
+        'USER': 'crawl_user',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS':{
+            'init_command': 'SET sql_mode ="STRICT_TRANS_TABLES"',
+            'charset': 'UTF8',
+        }
 
     }
 }

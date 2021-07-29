@@ -44,3 +44,8 @@ class Answer(models.Model):
     # null=True 컬럼에 null값 허용
     author = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     modify_date = models.DateTimeField(null=True, blank=True)
+
+# 블로그에있는 내용 크롤링하는 테스트 모델(테이블)
+class Data_By_Blog(models.Model):
+    title = models.CharField(max_length=200)
+    link = models.URLField()
